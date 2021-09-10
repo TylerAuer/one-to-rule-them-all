@@ -1,7 +1,10 @@
 import 'reflect-metadata';
 import express from 'express';
-import {createConnection} from 'typeorm';
-import {User} from './entity/User';
+import { createConnection } from 'typeorm';
+import { Task } from './entity/Task';
+import { ApolloServer } from 'apollo-server-express';
+import { buildSchema } from 'type-graphql';
+import { TaskResolver } from './resolvers/task_resolver';
 
 const PORT = 4000;
 
@@ -11,10 +14,10 @@ async function main() {
     type: 'postgres',
     host: 'localhost',
     port: 5432,
-    username: 'postgres',
+    username: 'tylerauer',
     password: 'postgres',
     database: 'one-to-rule-them-all',
-    entities: [User],
+    entities: [Task],
     synchronize: true,
     logging: false,
   }).catch((err) => {
@@ -22,11 +25,18 @@ async function main() {
   });
 
   const app = express();
-  app.get('/', (_, res) => {
-    res.send('Hello World!');
+
+  const apolloServer = new ApolloServer({
+    schema: await buildSchema({
+      resolvers: [TaskResolver],
+      validate: false,
+    }),
   });
 
+  await apolloServer.start();
+  apolloServer.applyMiddleware({ app });
+
   app.listen(PORT, () => {
-    console.log(`Listening at http://localhost:${PORT}`);
+    console.log(`Listening @ http://localhost:${PORT}`);
   });
 }

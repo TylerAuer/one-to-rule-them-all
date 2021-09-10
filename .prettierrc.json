@@ -4,9 +4,10 @@
   "semi": true,
   "singleQuote": true,
   "arrowParens": "always",
-  "bracketSpacing": false,
+  "bracketSpacing": true,
   "jsxBracketSameLine": false,
   "jsxSingleQuote": true,
   "proseWrap": "always",
-  "quoteProps": "as-needed"
+  "quoteProps": "as-needed",
+  "printWidth": 100
 }
