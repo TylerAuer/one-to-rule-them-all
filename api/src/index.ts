@@ -19,7 +19,7 @@ async function main() {
     database: 'one-to-rule-them-all',
     entities: [Task],
     synchronize: true,
-    logging: false,
+    logging: true,
   }).catch((err) => {
     console.log(err);
   });

@@ -21,7 +21,7 @@ export class Task extends BaseEntity {
   @Column({ nullable: false })
   title: string;
 
-  @Field()
+  @Field(() => String, { nullable: true })
   @Column({ nullable: true })
   desc: string;
 
@@ -29,7 +29,7 @@ export class Task extends BaseEntity {
   @Column({ nullable: false })
   due_date: Date;
 
-  @Field()
+  @Field(() => TaskState)
   @Column({
     type: 'enum',
     enum: TaskState,
