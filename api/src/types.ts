@@ -7,7 +7,6 @@ export enum TaskState {
   'BLOCKED',
   'CANCELED',
 }
-
 registerEnumType(TaskState, {
   name: 'TaskState',
   description: 'Possible states that a task can be in',
