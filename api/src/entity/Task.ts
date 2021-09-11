@@ -25,10 +25,6 @@ export class Task extends BaseEntity {
   @Column({ nullable: true })
   desc: string;
 
-  @Field()
-  @Column({ nullable: false })
-  due_date: Date;
-
   @Field(() => TaskState)
   @Column({
     type: 'enum',
@@ -39,12 +35,8 @@ export class Task extends BaseEntity {
   state: TaskState;
 
   @Field()
-  @Column({ default: 0, nullable: false })
-  reminders_sent_count: number;
-
-  @Field(() => String, { nullable: true })
-  @Column({ nullable: true, default: null })
-  last_reminder_sent_date: Date;
+  @Column({ nullable: false })
+  due_date: Date;
 
   @Field()
   @CreateDateColumn()

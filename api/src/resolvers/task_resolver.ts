@@ -1,15 +1,7 @@
-import { Arg, Field, InputType, Mutation, ObjectType, Query, Resolver } from 'type-graphql';
+import { Arg, Field, InputType, Mutation, Query, Resolver } from 'type-graphql';
+import { getConnection } from 'typeorm';
 import { Task } from '../entity/Task';
 import { ActionResultResponse, ErrorResponse, TaskState } from '../types';
-
-@ObjectType()
-class TaskResponse {
-  @Field(() => [Task], { nullable: true })
-  tasks?: Task[];
-
-  @Field(() => [ErrorResponse], { nullable: true })
-  errors?: ErrorResponse[];
-}
 
 @InputType()
 class CreateTaskInput {
@@ -23,78 +15,48 @@ class CreateTaskInput {
   state: TaskState;
 }
 
-@InputType()
-class UpdateTaskInput {
-  @Field()
-  id: string;
-  @Field({ nullable: true })
-  title: string;
-  @Field({ nullable: true })
-  due_date: Date;
-  @Field({ nullable: true })
-  desc: string;
-  @Field({ nullable: true })
-  state: TaskState;
-}
-
 @Resolver(Task)
 export class TaskResolver {
-  @Query(() => [TaskResponse], { nullable: true })
-  async tasks(): Promise<TaskResponse> {
-    const tasks = await Task.find();
-    return { tasks };
+  @Query(() => [Task], { nullable: true })
+  async tasks(): Promise<Task[]> {
+    return await Task.find();
   }
 
-  @Mutation(() => TaskResponse)
-  async createTask(@Arg('input') input: CreateTaskInput): Promise<TaskResponse> {
-    const task = await Task.create({ ...input }).save();
-    return { tasks: [task] };
+  @Mutation(() => Task, { nullable: true })
+  async createTask(@Arg('input') input: CreateTaskInput): Promise<Task | undefined> {
+    return await Task.create({ ...input }).save();
   }
 
   @Mutation(() => ActionResultResponse)
   async deleteTask(@Arg('id') id: string): Promise<ActionResultResponse> {
     const deleteResult = await Task.delete(id);
 
-    if (deleteResult.affected === 0) {
-      return {
-        success: false,
-        message: 'Error: Task not found. Unable to delete task.',
-      };
-    }
-
-    return {
-      success: true,
-      message: 'Task deleted successfully',
-    };
+    return deleteResult.affected === 0
+      ? {
+          success: false,
+          message: 'Error: Task not found. Unable to delete task.',
+        }
+      : {
+          success: true,
+          message: 'Task deleted successfully',
+        };
   }
 
-  @Mutation(() => TaskResponse)
-  async updateTask(@Arg('input') input: UpdateTaskInput): Promise<TaskResponse> {
-    if (!input.id)
-      return {
-        errors: [{ message: 'Error: You must provide an ID in order to update a task.' }],
-      };
+  @Mutation(() => Task, { nullable: true })
+  async updateTask(
+    @Arg('id') id: string,
+    @Arg('title') title: string,
+    @Arg('desc') desc: string,
+    @Arg('due_date', () => Date) due_date: Date,
+    @Arg('state', () => TaskState) state: TaskState
+  ): Promise<Task | undefined> {
+    const result = await getConnection()
+      .createQueryBuilder()
+      .update(Task)
+      .set({ title, desc, due_date, state })
+      .where('id = :id', { id: id })
+      .execute();
 
-    const task = await Task.findOne(input.id);
-
-    if (!task) {
-      return {
-        errors: [
-          { message: 'Error: Unable to update task because task does not exist in database.' },
-        ],
-      };
-    }
-
-    const updateResult = await Task.update(Task, { ...input });
-
-    if (updateResult.affected === 0) {
-      return {
-        errors: [{ message: 'Error: Unable to update task.' }],
-      };
-    }
-
-    return {
-      tasks: [task],
-    };
+    return result.raw[0];
   }
 }
