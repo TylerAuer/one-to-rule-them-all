@@ -4,12 +4,17 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { TaskState } from '../types';
+import { TaskMessage } from './TaskMessage';
 
+/**
+ * Task entity
+ */
 @ObjectType()
 @Entity()
 export class Task extends BaseEntity {
@@ -18,24 +23,23 @@ export class Task extends BaseEntity {
   id: string;
 
   @Field()
-  @Column({ nullable: false })
+  @Column()
   title: string;
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
-  desc: string;
+  desc?: string;
 
   @Field(() => TaskState)
   @Column({
     type: 'enum',
     enum: TaskState,
     default: TaskState.ACTIVE,
-    nullable: false,
   })
   state: TaskState;
 
   @Field()
-  @Column({ nullable: false })
+  @Column()
   due_date: Date;
 
   @Field()
@@ -45,4 +49,7 @@ export class Task extends BaseEntity {
   @Field()
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(() => TaskMessage, (taskMessage) => taskMessage.task)
+  messages: TaskMessage[];
 }

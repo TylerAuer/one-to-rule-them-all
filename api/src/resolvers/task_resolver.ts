@@ -1,5 +1,16 @@
-import { Arg, Field, InputType, Mutation, ObjectType, Query, Resolver } from 'type-graphql';
-import { Task } from '../entity/Task';
+import {
+  Arg,
+  Field,
+  FieldResolver,
+  InputType,
+  Mutation,
+  ObjectType,
+  Query,
+  Resolver,
+  Root,
+} from 'type-graphql';
+import { Task } from '../entities/Task';
+import { TaskMessage } from '../entities/TaskMessage';
 import { ActionResultResponse, TaskState } from '../types';
 
 @InputType()
@@ -50,6 +61,20 @@ class UpdateTaskResponse {
 
 @Resolver(Task)
 export class TaskResolver {
+  // @FieldResolver(() => Int)
+  // async message_count(@Root() task: Task): Promise<number> {
+  //   const { messages } = task;
+
+  //   if (!messages) return 0;
+  //   else return messages.length;
+  // }
+
+  @FieldResolver(() => [TaskMessage])
+  async messages(@Root() task: Task): Promise<TaskMessage[]> {
+    const messages = await TaskMessage.find({ where: { task: task.id } });
+    return messages;
+  }
+
   // Will need to use a me query to get tasks
   @Query(() => [Task], { nullable: true })
   async tasks(): Promise<Task[]> {

@@ -13,6 +13,15 @@ registerEnumType(TaskState, {
   description: 'Possible states that a task can be in',
 });
 
+export enum TaskMessageKind {
+  'REMINDER_FROM_APP',
+  'RESPONSE_FROM_ASSIGNEE',
+}
+registerEnumType(TaskMessageKind, {
+  name: 'TaskMessageKind',
+  description: 'Kind of message',
+});
+
 @ObjectType()
 export class ErrorResponse {
   @Field(() => String)
