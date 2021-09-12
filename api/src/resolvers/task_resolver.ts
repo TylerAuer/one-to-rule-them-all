@@ -1,7 +1,6 @@
-import { Arg, Field, InputType, Mutation, Query, Resolver } from 'type-graphql';
-import { getConnection } from 'typeorm';
+import { Arg, Field, InputType, Mutation, ObjectType, Query, Resolver } from 'type-graphql';
 import { Task } from '../entity/Task';
-import { ActionResultResponse, ErrorResponse, TaskState } from '../types';
+import { ActionResultResponse, TaskState } from '../types';
 
 @InputType()
 class CreateTaskInput {
@@ -10,53 +9,96 @@ class CreateTaskInput {
   @Field()
   due_date: Date;
   @Field({ nullable: true })
-  desc: string;
+  desc?: string;
+}
+
+@ObjectType()
+class CreateTaskResponse {
+  @Field(() => Task, { nullable: true })
+  task?: Task;
+  @Field(() => String, { nullable: true })
+  errorMessage?: string;
+}
+
+@InputType()
+class DeleteTaskInput {
+  @Field(() => String)
+  id: string;
+}
+
+@InputType()
+class UpdateTaskInput {
+  @Field(() => String)
+  id: string;
   @Field({ nullable: true })
-  state: TaskState;
+  title?: string;
+  @Field({ nullable: true })
+  desc?: string;
+  @Field({ nullable: true })
+  due_date?: Date;
+  @Field({ nullable: true })
+  state?: TaskState;
+}
+
+@ObjectType()
+class UpdateTaskResponse {
+  @Field(() => Task, { nullable: true })
+  task?: Task;
+  @Field(() => String, { nullable: true })
+  errorMessage?: string;
 }
 
 @Resolver(Task)
 export class TaskResolver {
+  // Will need to use a me query to get tasks
   @Query(() => [Task], { nullable: true })
   async tasks(): Promise<Task[]> {
     return await Task.find();
   }
 
   @Mutation(() => Task, { nullable: true })
-  async createTask(@Arg('input') input: CreateTaskInput): Promise<Task | undefined> {
-    return await Task.create({ ...input }).save();
+  async createTask(@Arg('input') input: CreateTaskInput): Promise<CreateTaskResponse> {
+    const task = await Task.create({ ...input }).save();
+    return task ? { task } : { errorMessage: 'Error: Unable to create task.' };
   }
 
   @Mutation(() => ActionResultResponse)
-  async deleteTask(@Arg('id') id: string): Promise<ActionResultResponse> {
-    const deleteResult = await Task.delete(id);
+  async deleteTask(@Arg('input') input: DeleteTaskInput): Promise<ActionResultResponse> {
+    const deleteResult = await Task.delete(input.id);
 
     return deleteResult.affected === 0
       ? {
           success: false,
-          message: 'Error: Task not found. Unable to delete task.',
+          message: `Error: Task not found. Unable to delete task with ID: ${input.id}`,
         }
       : {
           success: true,
-          message: 'Task deleted successfully',
+          message: `Successfully deleted task with ID: ${input.id}`,
         };
   }
 
   @Mutation(() => Task, { nullable: true })
-  async updateTask(
-    @Arg('id') id: string,
-    @Arg('title') title: string,
-    @Arg('desc') desc: string,
-    @Arg('due_date', () => Date) due_date: Date,
-    @Arg('state', () => TaskState) state: TaskState
-  ): Promise<Task | undefined> {
-    const result = await getConnection()
-      .createQueryBuilder()
-      .update(Task)
-      .set({ title, desc, due_date, state })
-      .where('id = :id', { id: id })
-      .execute();
+  async updateTask(@Arg('input') input: UpdateTaskInput): Promise<UpdateTaskResponse> {
+    // If only the ID is passed return an error
+    if (Object.keys(input).length === 1)
+      return {
+        errorMessage: `Error: No fields to update.`,
+      };
 
-    return result.raw[0];
+    const task = await Task.findOne(input.id);
+
+    if (!task)
+      return {
+        errorMessage: `Error: Task not found. Unable to update task with ID: ${input.id}`,
+      };
+
+    // Update any fields that are passed
+    input.title && (task.title = input.title);
+    input.desc && (task.desc = input.desc);
+    input.due_date && (task.due_date = input.due_date);
+    input.state && (task.state = input.state);
+    task.save();
+
+    return { task };
   }
 }

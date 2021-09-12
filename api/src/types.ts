@@ -5,7 +5,8 @@ export enum TaskState {
   'COMPLETED',
   'PAST_DUE',
   'BLOCKED',
-  'CANCELED',
+  'CANCELED_BY_CREATOR',
+  'CANCELED_BY_ASSIGNEE',
 }
 registerEnumType(TaskState, {
   name: 'TaskState',
