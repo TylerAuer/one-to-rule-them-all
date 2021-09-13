@@ -3,10 +3,8 @@ import express from 'express';
 import { createConnection } from 'typeorm';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
-import { User } from './entities/User';
-import { Task } from './entities/Task';
-import { TaskMessage } from './entities/TaskMessage';
 import { resolvers } from './resolvers';
+import { entities } from './entities';
 
 const PORT = 4000;
 
@@ -20,7 +18,7 @@ async function main() {
     username: 'tylerauer',
     password: 'postgres',
     database: 'one-to-rule-them-all',
-    entities: [Task, TaskMessage, User],
+    entities: entities,
     synchronize: true,
     logging: true,
   }).catch((err) => {
