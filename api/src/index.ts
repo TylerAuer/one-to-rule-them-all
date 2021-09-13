@@ -4,11 +4,9 @@ import { createConnection } from 'typeorm';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import { User } from './entities/User';
-import { UserResolver } from './resolvers/user_resolvers';
 import { Task } from './entities/Task';
-import { TaskResolver } from './resolvers/task_resolver';
 import { TaskMessage } from './entities/TaskMessage';
-import { TaskMessageResolver } from './resolvers/task_message_resolver';
+import { resolvers } from './resolvers';
 
 const PORT = 4000;
 
@@ -33,7 +31,7 @@ async function main() {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [TaskResolver, TaskMessageResolver, UserResolver],
+      resolvers: resolvers,
       validate: true,
     }),
     context: ({ req, res }) => ({ req, res }),
