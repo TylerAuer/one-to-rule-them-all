@@ -4,10 +4,10 @@ import { TaskMessage } from '../entities/TaskMessage';
 @Resolver(TaskMessage)
 export class TaskMessageResolver {
   @FieldResolver(() => String)
-  time_sent_relative(@Root() taskMessage: TaskMessage): string {
+  sent_days_ago(@Root() taskMessage: TaskMessage): string {
     const dateSent = taskMessage.sent_date;
     const now = new Date();
-    const diff = dateSent.getTime() - now.getTime();
+    const diff = now.getUTCDay() - dateSent.getUTCDay();
 
     const relTimeFormatter = new Intl.RelativeTimeFormat('en', {
       localeMatcher: 'best fit',

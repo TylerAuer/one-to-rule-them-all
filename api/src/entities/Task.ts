@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -11,6 +12,7 @@ import {
 
 import { TaskState } from '../types';
 import { TaskMessage } from './TaskMessage';
+import { User } from './User';
 
 /**
  * Task entity
@@ -34,9 +36,13 @@ export class Task extends BaseEntity {
   @Column({
     type: 'enum',
     enum: TaskState,
-    default: TaskState.ACTIVE,
+    default: TaskState.INCOMPLETE,
   })
   state: TaskState;
+
+  @Field()
+  @Column({ default: false })
+  archived: boolean;
 
   @Field()
   @Column()
@@ -52,4 +58,10 @@ export class Task extends BaseEntity {
 
   @OneToMany(() => TaskMessage, (taskMessage) => taskMessage.task)
   messages: TaskMessage[];
+
+  @ManyToOne(() => User, (user) => user.tasks_created)
+  creator: User;
+
+  @ManyToOne(() => User, (user) => user.task_assigned)
+  assignee: User;
 }

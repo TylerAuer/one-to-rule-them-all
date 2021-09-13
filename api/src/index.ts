@@ -3,13 +3,17 @@ import express from 'express';
 import { createConnection } from 'typeorm';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
-import { TaskResolver } from './resolvers/task_resolver';
+import { User } from './entities/User';
+import { UserResolver } from './resolvers/user_resolvers';
 import { Task } from './entities/Task';
+import { TaskResolver } from './resolvers/task_resolver';
 import { TaskMessage } from './entities/TaskMessage';
+import { TaskMessageResolver } from './resolvers/task_message_resolver';
 
 const PORT = 4000;
 
 main();
+
 async function main() {
   await createConnection({
     type: 'postgres',
@@ -18,7 +22,7 @@ async function main() {
     username: 'tylerauer',
     password: 'postgres',
     database: 'one-to-rule-them-all',
-    entities: [Task, TaskMessage],
+    entities: [Task, TaskMessage, User],
     synchronize: true,
     logging: true,
   }).catch((err) => {
@@ -29,9 +33,10 @@ async function main() {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [TaskResolver],
-      validate: false,
+      resolvers: [TaskResolver, TaskMessageResolver, UserResolver],
+      validate: true,
     }),
+    context: ({ req, res }) => ({ req, res }),
   });
 
   await apolloServer.start();

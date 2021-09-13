@@ -1,7 +1,7 @@
 import { ObjectType, Field, registerEnumType } from 'type-graphql';
 
 export enum TaskState {
-  'ACTIVE',
+  'INCOMPLETE',
   'COMPLETED',
   'PAST_DUE',
   'BLOCKED',

@@ -12,7 +12,7 @@ import { TaskMessageKind } from '../types';
 import { Task } from './Task';
 
 /**
- * A log for the text messages that have been sent as reminders as well as any responses received.
+ * A log for the text messages that have been sent as reminders or received in response.
  */
 @ObjectType()
 @Entity()
@@ -54,4 +54,7 @@ export class TaskMessage extends BaseEntity {
 
   @ManyToOne(() => Task, (task) => task.messages)
   task: Task;
+
+  @Field(() => String)
+  sent_days_ago: string;
 }
