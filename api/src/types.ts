@@ -1,4 +1,10 @@
 import { ObjectType, Field, registerEnumType } from 'type-graphql';
+import { Request, Response } from 'express';
+
+export type ApolloServerContextType = {
+  req: Request;
+  res: Response;
+};
 
 export enum TaskState {
   'INCOMPLETE',
