@@ -19,8 +19,8 @@ import { User } from './User';
 @Entity()
 export class TaskMessage extends BaseEntity {
   @Field(() => Int)
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Field()
   @Column()
