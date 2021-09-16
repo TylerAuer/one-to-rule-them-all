@@ -1,5 +1,15 @@
 import argon2d from 'argon2';
-import { Arg, Ctx, Field, FieldResolver, InputType, Mutation, Resolver, Root } from 'type-graphql';
+import {
+  Arg,
+  Ctx,
+  Field,
+  FieldResolver,
+  InputType,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from 'type-graphql';
 import { Task } from '../entities/Task';
 import { User } from '../entities/User';
 import { CustomContextType } from '../types';
@@ -34,14 +44,31 @@ export class UserResolver {
     return await Task.find({ where: { assignee: user.id } });
   }
 
+  @Query(() => User, { nullable: true })
+  async me(@Ctx() { req }: CustomContextType): Promise<User | undefined> {
+    if (!req.session.userId) {
+      return undefined;
+    }
+    return await User.findOne(req.session.userId);
+  }
+
   @Mutation(() => User)
-  async registerUser(@Arg('input') input: RegisterUserInput): Promise<User> {
+  async registerUser(
+    @Arg('input') input: RegisterUserInput,
+    @Ctx() { req }: CustomContextType
+  ): Promise<User> {
     const { name, email, password } = input;
     const lowerCaseEmail = email.toLowerCase();
     const hashedPassword = await argon2d.hash(password);
 
     try {
-      return await User.create({ name, email: lowerCaseEmail, password: hashedPassword }).save();
+      const user = await User.create({
+        name,
+        email: lowerCaseEmail,
+        password: hashedPassword,
+      }).save();
+      req.session.userId = user.id; // Login the user
+      return user;
     } catch {
       throw new Error('Email already in use.');
     }
