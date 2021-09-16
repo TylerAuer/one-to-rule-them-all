@@ -7,7 +7,12 @@
   "scripts": {
     "build": "tsc",
     "test:dbSetup": "ts-node ./src/test_utils/setup.ts",
-    "test": "npm run test:dbSetup && jest --watch"
+    "test": "npm run test:dbSetup && jest --watch",
+    "start:postgres": "postgres",
+    "start:redis": "redis-server",
+    "start:tsc": "tsc --watch",
+    "start:server": "nodemon dist/index.js",
+    "start:graphql": "open http://localhost:4000/graphql"
   },
   "dependencies": {
     "apollo-server-express": "^3.3.0",
