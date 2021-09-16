@@ -22,6 +22,17 @@ registerEnumType(TaskMessageKind, {
   description: 'Kind of message',
 });
 
+export enum TaskMessageStatus {
+  'SENT',
+  'RECEIVED',
+  'SCHEDULED',
+  'CANCELED',
+}
+registerEnumType(TaskMessageStatus, {
+  name: 'TaskMessageStatus',
+  description: 'Possible states for a task message',
+});
+
 @ObjectType()
 export class ErrorResponse {
   @Field(() => String)

@@ -8,8 +8,9 @@ import {
   UpdateDateColumn,
   ManyToOne,
 } from 'typeorm';
-import { TaskMessageKind } from '../types';
+import { TaskMessageKind, TaskMessageStatus } from '../types';
 import { Task } from './Task';
+import { User } from './User';
 
 /**
  * A log for the text messages that have been sent as reminders or received in response.
@@ -29,9 +30,15 @@ export class TaskMessage extends BaseEntity {
   @Column()
   sender_number: string;
 
+  @ManyToOne(() => User, (user) => user.messages_as_sender)
+  sender: User;
+
   @Field()
   @Column()
   recipient_number: string;
+
+  @ManyToOne(() => User, (user) => user.messages_as_recipient)
+  recipient: User;
 
   @Field(() => TaskMessageKind)
   @Column({
@@ -40,9 +47,22 @@ export class TaskMessage extends BaseEntity {
   })
   kind: TaskMessageKind;
 
+  @Field(() => TaskMessageStatus)
+  @Column({
+    type: 'enum',
+    enum: TaskMessageStatus,
+  })
+  status: TaskMessageStatus;
+
   @Field()
   @Column()
-  sent_date: Date;
+  send_date: Date;
+
+  @ManyToOne(() => Task, (task) => task.messages)
+  task: Task;
+
+  @Field(() => String)
+  sent_days_ago: string;
 
   @Field()
   @CreateDateColumn()
@@ -51,10 +71,4 @@ export class TaskMessage extends BaseEntity {
   @Field()
   @UpdateDateColumn()
   updated_at: Date;
-
-  @ManyToOne(() => Task, (task) => task.messages)
-  task: Task;
-
-  @Field(() => String)
-  sent_days_ago: string;
 }

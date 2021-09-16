@@ -2,9 +2,9 @@ import 'reflect-metadata';
 import express from 'express';
 import { createConnection } from 'typeorm';
 import { ApolloServer } from 'apollo-server-express';
-import { buildSchema } from 'type-graphql';
-import { resolvers } from './resolvers';
 import { entities } from './entities';
+import { createSchema } from './utils/create_schema';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 
 const PORT = 4000;
 
@@ -28,11 +28,9 @@ async function main() {
   const app = express();
 
   const apolloServer = new ApolloServer({
-    schema: await buildSchema({
-      resolvers: resolvers,
-      validate: true,
-    }),
+    schema: await createSchema(),
     context: ({ req, res }) => ({ req, res }),
+    plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
   });
 
   await apolloServer.start();

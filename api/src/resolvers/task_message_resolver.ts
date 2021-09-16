@@ -5,7 +5,7 @@ import { TaskMessage } from '../entities/TaskMessage';
 export class TaskMessageResolver {
   @FieldResolver(() => String)
   sent_days_ago(@Root() taskMessage: TaskMessage): string {
-    const dateSent = taskMessage.sent_date;
+    const dateSent = taskMessage.send_date;
     const now = new Date();
     const diff = now.getUTCDay() - dateSent.getUTCDay();
 
