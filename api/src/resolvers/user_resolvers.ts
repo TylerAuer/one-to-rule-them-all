@@ -1,7 +1,8 @@
 import argon2d from 'argon2';
-import { Arg, Field, FieldResolver, InputType, Mutation, Resolver, Root } from 'type-graphql';
+import { Arg, Ctx, Field, FieldResolver, InputType, Mutation, Resolver, Root } from 'type-graphql';
 import { Task } from '../entities/Task';
 import { User } from '../entities/User';
+import { CustomContextType } from '../types';
 
 @InputType()
 class RegisterUserInput {
@@ -47,7 +48,10 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  async login(@Arg('input') input: LoginUserInput): Promise<User> {
+  async login(
+    @Arg('input') input: LoginUserInput,
+    @Ctx() { req }: CustomContextType
+  ): Promise<User> {
     const { email, password } = input;
     const lowerCaseEmail = email.toLowerCase();
     const user = await User.findOne({ where: { email: lowerCaseEmail } });
@@ -58,6 +62,9 @@ export class UserResolver {
     if (!isCorrectPassword) {
       throw new Error('Incorrect password');
     }
+
+    req.session.userId = user.id;
+
     return user;
   }
 }

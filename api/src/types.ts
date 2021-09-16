@@ -1,8 +1,13 @@
 import { ObjectType, Field, registerEnumType } from 'type-graphql';
 import { Request, Response } from 'express';
+import { SessionData } from 'express-session';
 
-export type ApolloServerContextType = {
-  req: Request;
+export type CustomContextType = {
+  req: Request & {
+    session: SessionData & {
+      userId?: string;
+    };
+  };
   res: Response;
 };
 

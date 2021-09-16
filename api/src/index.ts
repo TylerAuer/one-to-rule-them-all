@@ -5,7 +5,7 @@ import { ApolloServer } from 'apollo-server-express';
 import { entities } from './entities';
 import { createSchema } from './utils/create_schema';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
-import { ApolloServerContextType } from './types';
+import { CustomContextType } from './types';
 import constants from './constants';
 import redis from 'redis';
 import session from 'express-session';
@@ -67,7 +67,7 @@ function addRedisMiddleware(app: Express) {
 async function startApolloServer(app: Express) {
   const apolloServer = new ApolloServer({
     schema: await createSchema(),
-    context: ({ req, res }): ApolloServerContextType => ({ req, res }),
+    context: ({ req, res }): CustomContextType => ({ req, res }),
     plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
   });
 
