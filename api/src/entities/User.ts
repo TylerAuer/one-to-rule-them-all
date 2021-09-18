@@ -1,7 +1,6 @@
 import { ObjectType, Field } from 'type-graphql';
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Task } from './Task';
-import { TaskMessage } from './TaskMessage';
 
 @ObjectType()
 @Entity()
@@ -21,11 +20,9 @@ export class User extends BaseEntity {
   @Column()
   name: string;
 
-  @OneToMany(() => TaskMessage, (taskMessage) => taskMessage.sender)
-  messages_as_sender: TaskMessage[];
-
-  @OneToMany(() => TaskMessage, (taskMessage) => taskMessage.recipient)
-  messages_as_recipient: TaskMessage[];
+  @Field()
+  @Column()
+  phone_number: string;
 
   @Field(() => [Task])
   @OneToMany(() => Task, (task) => task.creator)

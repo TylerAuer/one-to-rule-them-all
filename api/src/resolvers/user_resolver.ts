@@ -22,6 +22,8 @@ class RegisterUserInput {
   email: string;
   @Field()
   password: string;
+  @Field({ nullable: true })
+  phone_number: string;
 }
 
 @InputType()

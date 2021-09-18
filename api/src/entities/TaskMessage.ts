@@ -26,20 +26,6 @@ export class TaskMessage extends BaseEntity {
   @Column()
   message: string;
 
-  @Field()
-  @Column()
-  sender_number: string;
-
-  @ManyToOne(() => User, (user) => user.messages_as_sender)
-  sender: User;
-
-  @Field()
-  @Column()
-  recipient_number: string;
-
-  @ManyToOne(() => User, (user) => user.messages_as_recipient)
-  recipient: User;
-
   @Field(() => TaskMessageKind)
   @Column({
     type: 'enum',
