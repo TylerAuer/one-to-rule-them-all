@@ -10,6 +10,7 @@ import {
   Resolver,
   Root,
 } from 'type-graphql';
+import { getConnection } from 'typeorm';
 import { Task } from '../entities/Task';
 import { TaskMessage } from '../entities/TaskMessage';
 import { User } from '../entities/User';
@@ -59,26 +60,47 @@ class UpdateTaskResponse {
 
 @Resolver(Task)
 export class TaskResolver {
+  @FieldResolver(() => User)
+  async assignee(@Root() task: Task): Promise<User> {
+    // return User.findOneOrFail({ where: { tasks_assigned: task.assignee } });
+    const assignee = await getConnection()
+      .createQueryBuilder()
+      .relation(Task, 'assignee')
+      .of(task)
+      .loadOne();
+    if (!assignee) {
+      throw new Error('Error: Unable to find assignee');
+    }
+    return assignee;
+  }
+
+  @FieldResolver(() => User)
+  async creator(@Root() task: Task): Promise<User> {
+    // return User.findOneOrFail({ where: { tasks_assigned: task.assignee } });
+    const creator = await getConnection()
+      .createQueryBuilder()
+      .relation(Task, 'creator')
+      .of(task)
+      .loadOne();
+    if (!creator) {
+      throw new Error('Error: Unable to find creator');
+    }
+    return creator;
+  }
+
+  // @FieldResolver(() => User)
+  // async creator(@Root() task: Task): Promise<User> {
+  //   return await User.findOneOrFail(task.creator);
+  // }
+
   @FieldResolver(() => [TaskMessage])
   async messages(@Root() task: Task): Promise<TaskMessage[]> {
-    const messages = await TaskMessage.find({ where: { task: task.id } });
-    return messages;
+    return await TaskMessage.find({ where: { task: task.id } });
   }
 
-  @FieldResolver(() => User)
-  creator(@Root() task: Task): User {
-    return task.creator;
-  }
-
-  @FieldResolver(() => User)
-  assignee(@Root() task: Task): User {
-    return task.assignee;
-  }
-
-  // Will need to use a me query to get tasks
   @Query(() => [Task], { nullable: true })
-  async tasks(): Promise<Task[]> {
-    return await Task.find({ where: { archived: false } });
+  async tasks(@Ctx() { req }: CustomContextType): Promise<Task[]> {
+    return await Task.find({ where: { archived: false, creator: req.session.userId } });
   }
 
   // Will need to use a me query to get tasks

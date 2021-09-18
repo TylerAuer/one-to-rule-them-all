@@ -62,6 +62,6 @@ export class Task extends BaseEntity {
   @ManyToOne(() => User, (user) => user.tasks_created)
   creator: User;
 
-  @ManyToOne(() => User, (user) => user.task_assigned)
+  @ManyToOne(() => User, (user) => user.tasks_assigned)
   assignee: User;
 }

@@ -27,9 +27,11 @@ export class User extends BaseEntity {
   @OneToMany(() => TaskMessage, (taskMessage) => taskMessage.recipient)
   messages_as_recipient: TaskMessage[];
 
+  @Field(() => [Task])
   @OneToMany(() => Task, (task) => task.creator)
   tasks_created: Task[];
 
+  @Field(() => [Task])
   @OneToMany(() => Task, (task) => task.assignee)
-  task_assigned: Task[];
+  tasks_assigned: Task[];
 }

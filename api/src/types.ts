@@ -2,6 +2,8 @@ import { ObjectType, Field, registerEnumType } from 'type-graphql';
 import { Request, Response } from 'express';
 import { SessionData } from 'express-session';
 
+export type Lazy<T extends object> = Promise<T> | T;
+
 type SessionWithUserIdType = {
   session: SessionData & {
     userId?: string;
