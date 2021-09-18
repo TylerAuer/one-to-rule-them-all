@@ -94,4 +94,10 @@ export class UserResolver {
 
     return user;
   }
+
+  @Mutation(() => String)
+  logout(@Ctx() { req }: CustomContextType): string {
+    req.session.userId = undefined;
+    return 'Logged out user.';
+  }
 }
