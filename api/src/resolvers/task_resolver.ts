@@ -1,5 +1,6 @@
 import {
   Arg,
+  Ctx,
   Field,
   FieldResolver,
   InputType,
@@ -11,24 +12,19 @@ import {
 } from 'type-graphql';
 import { Task } from '../entities/Task';
 import { TaskMessage } from '../entities/TaskMessage';
-import { ActionResultResponse, TaskState } from '../types';
+import { User } from '../entities/User';
+import { ActionResultResponse, CustomContextType, TaskState } from '../types';
 
 @InputType()
 class CreateTaskInput {
   @Field()
   title: string;
-  @Field()
-  due_date: Date;
   @Field({ nullable: true })
   desc?: string;
-}
-
-@ObjectType()
-class CreateTaskResponse {
-  @Field(() => Task, { nullable: true })
-  task?: Task;
-  @Field(() => String, { nullable: true })
-  errorMessage?: string;
+  @Field()
+  due_date: Date;
+  @Field()
+  assignee_id: string;
 }
 
 @InputType()
@@ -69,6 +65,16 @@ export class TaskResolver {
     return messages;
   }
 
+  @FieldResolver(() => User)
+  creator(@Root() task: Task): User {
+    return task.creator;
+  }
+
+  @FieldResolver(() => User)
+  assignee(@Root() task: Task): User {
+    return task.assignee;
+  }
+
   // Will need to use a me query to get tasks
   @Query(() => [Task], { nullable: true })
   async tasks(): Promise<Task[]> {
@@ -82,9 +88,23 @@ export class TaskResolver {
   }
 
   @Mutation(() => Task, { nullable: true })
-  async createTask(@Arg('input') input: CreateTaskInput): Promise<CreateTaskResponse> {
-    const task = await Task.create({ ...input }).save();
-    return task ? { task } : { errorMessage: 'Error: Unable to create task.' };
+  async createTask(
+    @Arg('input') input: CreateTaskInput,
+    @Ctx() { req }: CustomContextType
+  ): Promise<Task> {
+    const creatorId = req.session.userId;
+    if (!creatorId) {
+      throw new Error('Error: Must be logged in to create task');
+    }
+    const task = await Task.create({
+      ...input,
+      creator: await User.findOne(creatorId),
+      assignee: await User.findOne(input.assignee_id),
+    }).save();
+    if (!task) {
+      throw new Error(`Error: Unable to create task.`);
+    }
+    return task;
   }
 
   @Mutation(() => ActionResultResponse)

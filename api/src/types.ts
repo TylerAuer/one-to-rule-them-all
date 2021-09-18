@@ -2,12 +2,14 @@ import { ObjectType, Field, registerEnumType } from 'type-graphql';
 import { Request, Response } from 'express';
 import { SessionData } from 'express-session';
 
-export type CustomContextType = {
-  req: Request & {
-    session: SessionData & {
-      userId?: string;
-    };
+type SessionWithUserIdType = {
+  session: SessionData & {
+    userId?: string;
   };
+};
+
+export type CustomContextType = {
+  req: Request & SessionWithUserIdType;
   res: Response;
 };
 
