@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
 import { SerializedStyles } from '@emotion/utils';
 import { css } from '@emotion/react';
-import { text } from '../constants';
+import { font } from '../constants';
 
 const variantCss = {
   subtitle: css`
-    ${text.size.md};
+    ${font.size.md};
   `,
 };
 

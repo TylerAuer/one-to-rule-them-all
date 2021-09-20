@@ -1,25 +1,25 @@
 import { SerializedStyles } from '@emotion/utils';
 import { css } from '@emotion/react';
-import { text } from '../constants';
+import { font } from '../constants';
 
 const cssMap = {
   1: css`
-    font-size: ${text.size.xxl};
+    font-size: ${font.size.xxl};
   `,
   2: css`
-    font-size: ${text.size.xl};
+    font-size: ${font.size.xl};
   `,
   3: css`
-    font-size: ${text.size.lg};
+    font-size: ${font.size.lg};
   `,
   4: css`
-    font-size: ${text.size.md};
+    font-size: ${font.size.md};
   `,
   5: css`
-    font-size: ${text.size.sm};
+    font-size: ${font.size.sm};
   `,
   6: css`
-    font-size: ${text.size.xs};
+    font-size: ${font.size.xs};
   `,
 };
 

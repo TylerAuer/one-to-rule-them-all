@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { space, text } from '../constants';
+import { space, font } from '../constants';
 import { Button } from '../style_components/Button';
 import { Text } from '../style_components/Text';
 
@@ -18,7 +18,9 @@ const left = css`
 const center = css`
   text-align: center;
   justify-self: center;
-  font-size: ${text.size.lg};
+  font-size: ${font.size.lg};
+  font-style: italic;
+  font-weight: ${font.weight.bold};
 `;
 
 const right = css`

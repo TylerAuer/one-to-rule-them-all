@@ -1,4 +1,18 @@
-export const text = {
+export const color = {
+  light: {
+    text: '#123C69',
+    textMuted: '#bab2b5',
+    textAccent: '#fff',
+    textPunch: '#AC3b61',
+    bgDark: '#eba98d',
+    bg: '#edc7b7',
+    bgMuted: '#eee2dc',
+    btn: '#f7baa1',
+    btnHover: '#cc9178',
+  },
+};
+
+export const font = {
   size: {
     xxl: '32px',
     xl: '28px',
@@ -11,6 +25,9 @@ export const text = {
     normal: '400',
     bold: '500',
     bolder: '700',
+  },
+  family: {
+    primary: '"Roboto", sans-serif',
   },
 };
 
