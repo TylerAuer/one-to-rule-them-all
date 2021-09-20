@@ -7,6 +7,11 @@ export const text = {
     sm: '13px',
     xs: '10px',
   },
+  weight: {
+    normal: '400',
+    bold: '500',
+    bolder: '700',
+  },
 };
 
 export const space = {
