@@ -1,25 +1,23 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { css } from '@emotion/react';
-import { Header } from '../style_components/Header';
-import { font } from '../constants';
+import { Heading } from '../style_components/Heading';
+import { Text } from '../style_components/Text';
 
 const titleCss = css`
-  font-size: ${font.size.xl};
   text-align: center;
 `;
 
 const subtitleCss = css`
-  font-size: ${font.size.md};
   text-align: center;
 `;
 
 export function AppTitle() {
   return (
-    <>
-      <Header css={titleCss} level={1}>
+    <Fragment>
+      <Heading sx={titleCss} level={1}>
         Did you...
-      </Header>
-      <div css={subtitleCss}>Friendly text reminders, so you don't have to be a pest.</div>
-    </>
+      </Heading>
+      <Text sx={subtitleCss}>Friendly text reminders. So you don't have to be the pest.</Text>
+    </Fragment>
   );
 }
