@@ -8,14 +8,11 @@ Save on hosting costs -- one server, one DB -- and make it free to spin up new p
 
 ## Short-term To Do List
 
-- [Get Jest set up](https://itnext.io/testing-with-jest-in-typescript-cc1cd0095421)
-- Write tests for resolvers
 - Build a simple frontend
 
 ## Perfect Set Up
 
-- Multiple FE frameworks: React and Svelte specifically
-- Backend in Node / Express
+- Multiple FE frameworks: React, Svelte, and Gatsby
 - Shared types everywhere
 - ORM with migrations
 - Testing with Jest and Cypress

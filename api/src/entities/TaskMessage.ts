@@ -10,7 +10,6 @@ import {
 } from 'typeorm';
 import { TaskMessageKind, TaskMessageStatus } from '../types';
 import { Task } from './Task';
-import { User } from './User';
 
 /**
  * A log for the text messages that have been sent as reminders or received in response.

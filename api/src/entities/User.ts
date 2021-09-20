@@ -21,8 +21,8 @@ export class User extends BaseEntity {
   name: string;
 
   @Field()
-  @Column()
-  phone_number: string;
+  @Column({ nullable: true })
+  phone_number?: string;
 
   @Field(() => [Task])
   @OneToMany(() => Task, (task) => task.creator)
