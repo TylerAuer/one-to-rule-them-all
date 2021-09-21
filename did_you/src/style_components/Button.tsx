@@ -7,10 +7,8 @@ type ButtonSizes = 'small' | 'medium' | 'large';
 type ButtonShapes = 'circle' | 'pill' | 'rectangle';
 
 const btnCss = css`
-  border: none;
   outline: none;
   color: white;
-  padding: ${space.padding.lg} ${space.padding.xl};
   cursor: pointer;
   font-family: Roboto, sans-serif;
 `;
@@ -19,14 +17,12 @@ const btnSizes: { [key in ButtonSizes]: SerializedStyles } = {
   small: css`
     font-size: ${font.size.sm};
     padding: ${space.padding.sm} ${space.padding.md};
-    margin: ${space.margin.sm};
     border: 1px solid transparent;
   `,
   medium: css`
     font-size: ${font.size.md};
     padding: ${space.padding.md} ${space.padding.lg};
     letter-spacing: 0.5px;
-    margin: ${space.margin.md};
     border: 2px solid transparent;
   `,
   large: css`
@@ -34,7 +30,6 @@ const btnSizes: { [key in ButtonSizes]: SerializedStyles } = {
     padding: ${space.padding.lg} ${space.padding.xl};
     font-weight: ${font.weight.bold};
     letter-spacing: 1px;
-    margin: ${space.margin.lg};
     border: 2px solid transparent;
   `,
 };

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { space, font } from '../constants';
 import { Button } from '../style_components/Button';
-import { Text } from '../style_components/Text';
+import { Words } from '../style_components/Words';
 
 const containerCss = css`
   display: grid;
@@ -32,7 +32,7 @@ export function HeaderBar() {
   return (
     <div css={containerCss}>
       <div css={left} />
-      <Text sx={center}>Did you...?</Text>
+      <Words sx={center}>Did you...?</Words>
       <div css={right}>
         <Button onClick={() => {}}>Sign in</Button>
       </div>

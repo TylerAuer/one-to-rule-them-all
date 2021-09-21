@@ -1,8 +1,8 @@
 export const color = {
   light: {
     text: '#123C69',
-    textMuted: '#bab2b5',
-    textAccent: '#fff',
+    textMuted: '#fe5594',
+    // textAccent: '#fff',
     textPunch: '#AC3b61',
     bgDark: '#eba98d',
     bg: '#edc7b7',
@@ -30,6 +30,7 @@ export const font = {
   family: {
     primary: '"Roboto", sans-serif',
   },
+  lineHeight: '1.55',
 };
 
 export const space = {

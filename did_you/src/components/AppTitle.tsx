@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { css } from '@emotion/react';
 import { Heading } from '../style_components/Heading';
-import { Text } from '../style_components/Text';
+import { Words } from '../style_components/Words';
 
 const titleCss = css`
   text-align: center;
@@ -17,7 +17,9 @@ export function AppTitle() {
       <Heading sx={titleCss} level={1}>
         Did you...
       </Heading>
-      <Text sx={subtitleCss}>Friendly text reminders. So you don't have to be the pest.</Text>
+      <Words variant='subtitle' sx={subtitleCss}>
+        Friendly text reminders. So you don't have to be the pest.
+      </Words>
     </Fragment>
   );
 }

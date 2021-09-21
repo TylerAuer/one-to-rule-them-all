@@ -3,6 +3,7 @@ import { AppTitle } from './components/AppTitle';
 import { AppStyles } from './style_components/AppStyles';
 import { Container } from './style_components/Container';
 import { HeaderBar } from './components/HeaderBar';
+import { Account } from './components/Account';
 
 export function App() {
   return (
@@ -11,6 +12,7 @@ export function App() {
       <HeaderBar />
       <Container>
         <AppTitle />
+        <Account />
       </Container>
     </Fragment>
   );
