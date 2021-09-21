@@ -7,8 +7,9 @@ export const color = {
     bgDark: '#eba98d',
     bg: '#edc7b7',
     bgMuted: '#eee2dc',
-    btn: '#f7baa1',
-    btnHover: '#cc9178',
+    btn: '#ffa27d',
+    btnHover: '#ff8f60',
+    accent: '#9ba7f8',
   },
 };
 
@@ -47,5 +48,10 @@ export const space = {
     md: '8px',
     sm: '5px',
     xs: '2px',
+  },
+  iconSize: {
+    sm: '20px',
+    md: '30px',
+    lg: '40px',
   },
 };

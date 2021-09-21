@@ -3,40 +3,78 @@ import { ReactNode } from 'react';
 import { space, font, color } from '../constants';
 
 type ButtonVariants = 'primary' | 'destroy' | 'quiet';
+type ButtonSizes = 'small' | 'medium' | 'large';
+type ButtonShapes = 'circle' | 'pill' | 'rectangle';
 
-const button = css`
-  border-radius: 5px;
+const btnCss = css`
   border: none;
   outline: none;
   color: white;
   padding: ${space.padding.lg} ${space.padding.xl};
-  font-size: ${font.size.md};
-  font-weight: ${font.weight.bold};
   cursor: pointer;
   font-family: Roboto, sans-serif;
-  letter-spacing: 0.5px;
 `;
 
-const btnVariants = {
+const btnSizes: { [key in ButtonSizes]: SerializedStyles } = {
+  small: css`
+    font-size: ${font.size.sm};
+    padding: ${space.padding.sm} ${space.padding.md};
+    margin: ${space.margin.sm};
+    border: 1px solid transparent;
+  `,
+  medium: css`
+    font-size: ${font.size.md};
+    padding: ${space.padding.md} ${space.padding.lg};
+    letter-spacing: 0.5px;
+    margin: ${space.margin.md};
+    border: 2px solid transparent;
+  `,
+  large: css`
+    font-size: ${font.size.lg};
+    padding: ${space.padding.lg} ${space.padding.xl};
+    font-weight: ${font.weight.bold};
+    letter-spacing: 1px;
+    margin: ${space.margin.lg};
+    border: 2px solid transparent;
+  `,
+};
+
+const btnVariants: { [key in ButtonVariants]: SerializedStyles } = {
   primary: css`
-    ${button};
     background-color: ${color.light.btn};
 
     :hover {
       background-color: ${color.light.btnHover};
+    }
+    :focus-visible {
+      border-color: ${color.light.accent};
     }
   `,
   destroy: css``,
   quiet: css``,
 };
 
+const btnShapes: { [key in ButtonShapes]: SerializedStyles } = {
+  circle: css`
+    border-radius: 50%;
+    height: 100px;
+  `,
+  pill: css`
+    border-radius: 1000px;
+  `,
+  rectangle: css`
+    border-radius: 8px;
+  `,
+};
+
 type ButtonProps = {
   onClick: () => void;
   children: ReactNode;
-  variant?: ButtonVariants;
   isDisabled?: Boolean;
   sx?: SerializedStyles;
-  size?: 'small' | 'medium' | 'large';
+  variant?: ButtonVariants;
+  size?: ButtonSizes;
+  shape?: ButtonShapes;
 };
 
 export const Button = ({
@@ -45,9 +83,14 @@ export const Button = ({
   sx,
   variant = 'primary',
   size = 'medium',
+  shape = 'rectangle',
 }: ButtonProps) => {
+  const variantCss = btnVariants[variant];
+  const sizeCss = btnSizes[size];
+  const shapeCss = btnShapes[shape];
+
   return (
-    <button css={[btnVariants[variant], sx]} onClick={onClick}>
+    <button css={[btnCss, variantCss, sizeCss, shapeCss, sx]} onClick={onClick}>
       {children}
     </button>
   );
