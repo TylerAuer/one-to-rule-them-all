@@ -11,8 +11,10 @@
     "start:postgres": "postgres",
     "start:redis": "redis-server",
     "start:tsc": "tsc --watch",
-    "start:server": "nodemon dist/index.js",
-    "start:graphql": "open http://localhost:4000/graphql"
+    "start:dev": "nodemon dist/index.js",
+    "start:prod": "node dist/index.js",
+    "start:graphql": "open http://localhost:4000/graphql",
+    "start": "yarn start:postgres & yarn start:redis & yarn start:prod"
   },
   "dependencies": {
     "@types/luxon": "^2.0.4",

@@ -1,8 +1,6 @@
-import { getTwilioClient } from './twilio_config';
 import twilio from 'twilio';
 
 export function sendSMS(client: twilio.Twilio, recipientNumber: string, message: string) {
-  const twilio = getTwilioClient();
   const twilioNumber = process.env.TWILIO_PHONE_NUMBER;
 
   client.messages
