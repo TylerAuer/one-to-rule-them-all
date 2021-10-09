@@ -1,17 +1,21 @@
 version: '3.7'
-
 services:
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: base
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: one-to-rule-them-all
     volumes:
-      - ./src:/home/node/app/src
-      - ./nodemon.json:/home/node/app/nodemon.json
-    container_name: ts-node-docker
-    expose:
-      - '4000'
+      - ./volumes/db/pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+  redis:
+    image: redis
+  api:
+    image: tylerauer/one-api:latest
+    depends_on:
+      - redis
+      - db
     ports:
       - '4000:4000'
-    command: npm run dev
