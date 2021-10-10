@@ -19,6 +19,6 @@ services:
       context: ./api
     depends_on:
       - redis
-      - db
+      - postgres
     ports:
       - '4000:4000'

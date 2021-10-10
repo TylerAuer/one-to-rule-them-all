@@ -26,6 +26,7 @@ async function main() {
 }
 
 async function connectToPostgres() {
+  console.log('Attempting to connect to PostgreSQL');
   let retriesAllowed = 10;
   const waitBetweenRetries = 5000;
 
@@ -33,7 +34,7 @@ async function connectToPostgres() {
     try {
       await createConnection({
         type: 'postgres',
-        host: 'postgres://postgres:postgres@postgres:5432/one-to-rule-them-all',
+        host: 'postgres',
         port: 5432,
         username: 'postgres',
         password: 'postgres',
@@ -54,6 +55,7 @@ async function connectToPostgres() {
 }
 
 async function addRedisMiddleware(app: Express) {
+  console.log('Attempting to connect to Redis');
   let retriesAllowed = 10;
   const waitBetweenRetries = 5000;
 
@@ -61,8 +63,8 @@ async function addRedisMiddleware(app: Express) {
     try {
       const RedisStore = connectRedis(expressSession);
       const redisClient = redis.createClient({
+        host: 'redis',
         port: 6379,
-        host: 'localhost',
       });
       app.use(
         expressSession({
