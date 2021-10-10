@@ -1,15 +1,16 @@
-FROM node:14
+FROM node:latest
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+COPY package.json ./
+COPY yarn.lock ./
 
-RUN yarn install
-
+RUN yarn
 COPY . .
-
 RUN yarn build
 
-EXPOSE 8080
+ENV NODE_ENV production
 
-CMD yarn start
+EXPOSE 8080
+CMD yarn start:prod
+USER node
