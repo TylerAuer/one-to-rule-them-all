@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:16
 
 WORKDIR /usr/src/app
 
@@ -9,8 +9,6 @@ RUN yarn
 COPY . .
 RUN yarn build
 
-ENV NODE_ENV production
-
 EXPOSE 8080
-CMD yarn start:prod
+CMD yarn start:dev
 USER node

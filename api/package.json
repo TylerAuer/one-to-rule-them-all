@@ -8,13 +8,10 @@
     "build": "tsc",
     "test:dbSetup": "ts-node ./src/test_utils/setup.ts",
     "test": "npm run test:dbSetup && jest --watch",
-    "start:postgres": "postgres",
-    "start:redis": "redis-server",
     "start:tsc": "tsc --watch",
     "start:dev": "nodemon dist/index.js",
     "start:prod": "node dist/index.js",
-    "start:graphql": "open http://localhost:4000/graphql",
-    "start": "yarn start:postgres & yarn start:redis & yarn start:prod"
+    "start:graphql": "open http://localhost:4000/graphql"
   },
   "dependencies": {
     "@types/luxon": "^2.0.4",
@@ -42,6 +39,7 @@
     "@types/redis": "^2.8.32",
     "jest": "^27.2.0",
     "mockdate": "^3.0.5",
+    "nodemon": "^2.0.13",
     "ts-jest": "^27.0.5",
     "typescript": "^4.4.3"
   }
