@@ -2,32 +2,38 @@
 
 This repo is an exploration of combining all of my projects into a single repo.
 
-## Motivations
+## Ideal outcomes
 
-Save on hosting costs -- one server, one DB -- and make it free to spin up new projects just by using a url.
+- CI/CD with GitHub pushes
+- Shared component library + style system
+- Shared FE & BE types
+- Strong linting (EsLint)
+- Strong testing (Jest + Cypress)
+- Performant
+- Monitoring (DD)
+- Tracking + Analytics (StatsD)
+- Hosting costs that don't rise (much) with additional projects
 
-## Short-term To Do List
+## Stack
 
-- Build a simple frontend
+- React - I know it best, it's popular, and I can iterate on it quickly
+- Emotion - I know it. I prefer CSS in JS
+- Framer Motion
 
-## Perfect Set Up
+- Node + Express - One language for whole project
+- Authentication
+- PSQL - Prefer relational DB
+- TypeORM
+- GraphQL
+  
+- Postgres
+- Redis - Probably overkill, but I'd like to get the XP
 
-- Multiple FE frameworks: React, Svelte, and Gatsby
-- Shared types everywhere
-- ORM with migrations
-- Testing with Jest and Cypress
-- Redis for caching
-- Home grown tracking system with summary analytics
-- GQL
+- Jest
+- Cypress
 
-## Steps
+- Datadog
+- Sentry or LogRocket
 
-- Follow Ben Awad's tutorial
-- Port projects
-  - Blog
-  - Fruit Matrix
-  - Bad Calculators
-  - SB Props
-- Add new projects
-  - Jess pester
-  - Lottery
+- Something for emails???
+- Twilio for SMS
